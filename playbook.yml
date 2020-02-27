@@ -1,11 +1,7 @@
 ---
 - hosts: "{{ host_pattern }}"
-#  gather_facts: false
  
   tasks:
-#  - setup:
-#      gather_subset: network
-
   - name: Get Host DB
     set_fact:
      host_db : "{{ groups['database'] | intersect (groups[host_pattern]) }}"
@@ -17,6 +13,9 @@
   - name: Get Host Front
     set_fact:
      host_front : "{{ groups['front'] | intersect (groups[host_pattern]) }}"
+
+  - debug: var=hostvars
+    tags: ['debug', 'never']
   
   - debug:
       msg: |
