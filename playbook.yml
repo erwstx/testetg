@@ -4,22 +4,19 @@
   tasks:
   - name: Get Host DB
     set_fact:
-     host_db : "{{ groups['database'] | intersect (groups[host_pattern]) }}"
+     host_db : "{{ groups['database'] | intersect (groups[host_pattern]) | join() }}"
 
   - name: Get Host App
     set_fact:
-     host_app : "{{ groups['app'] | intersect (groups[host_pattern]) }}"
+     host_app : "{{ groups['app'] | intersect (groups[host_pattern]) | join() }}"
 
   - name: Get Host Front
     set_fact:
-     host_front : "{{ groups['front'] | intersect (groups[host_pattern]) }}"
+     host_front : "{{ groups['front'] | intersect (groups[host_pattern]) | join() }}"
 
-  - debug: var=hostvars
-    tags: ['debug', 'never']
-  
   - debug:
       msg: |
-        IP Host DB: {{ hostvars[host_db]['ansible_facts']['ansible_default_ipv4']['address'] }}
-        Host App: {{ hostvars[host_app]['ansible_facts']['ansible_default_ipv4']['address'] }}
-        Host Front: {{ hostvars[host_front]['ansible_facts']['ansible_default_ipv4']['address'] }}
+        IP Host DB: {{ hostvars[host_db]['ansible_facts']['default_ipv4']['address'] }}
+        Host App: {{ hostvars[host_app]['ansible_facts']['default_ipv4']['address'] }}
+        Host Front: {{ hostvars[host_front]['ansible_facts']['default_ipv4']['address'] }}
     run_once: true
